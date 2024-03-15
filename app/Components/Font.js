@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   setColor1,
   setColor2,
@@ -16,13 +16,16 @@ import axios from "axios";
 import { ColorPicker, useColor } from "react-color-palette";
 import { FaCrown } from "react-icons/fa6";
 import { APIPRO } from "@/Essentials";
+import colors from "../assets/color.png"
 
 import style from "../pages/CustomScrollbar.module.css";
+import Image from "next/image";
 function Styles({ search }) {
   const dispatch = useDispatch();
   const [fonnt, setFonnt] = useState([]);
   const [color, setColor] = useColor("#000");
   const [clickk, setClickk] = useState(false);
+  const { active } = useSelector((state) => state.prosite_data)
 
   const Fonts = async () => {
     try {
@@ -32,7 +35,7 @@ function Styles({ search }) {
       console.log("Items not fetched");
     }
   };
-  console.log(fonnt, "hi");
+
   useEffect(() => {
     Fonts();
   }, []);
@@ -45,17 +48,22 @@ function Styles({ search }) {
 
   return (
     <>
+      <div onClick={() => setClickk(false)} className={`fixed inset-0 ${clickk ? "z-10" : "-z-10"} w-screen h-screen`}></div >
       <div className="my-2">
         <div className="text-[#424242] font-medium text-[14px]">Text color</div>
-        <div
+        {/* <div
           className=" h-[40px] w-[40px] bg-[#424242] my-2 rounded-lg"
           onClick={() => {
             dispatch(settClic(true));
             setClickk(true);
           }}
-        ></div>
+        ></div> */}
+        <Image src={colors} className="h-[40px] w-[40px] rounded-xl" alt="color" onClick={() => {
+          dispatch(settClic(true));
+          setClickk(true);
+        }} />
       </div>
-      <div className={clickk === false ? "hidden" : "absolute w-[250px] "}>
+      <div className={clickk === false ? "hidden" : "absolute w-[250px] z-10"}>
         <ColorPicker color={color} onChange={setColor} width="100%" />
       </div>
       <div
@@ -68,10 +76,11 @@ function Styles({ search }) {
                 return f.name.toLowerCase().includes(search.toLowerCase());
               })
               .map((d, i) => (
-                <div className="flex w-[96%] h-[100px] mt-2 relative hover:bg-[#28292c] hover:shadow-lg hover:scale-105 duration-75 justify-center items-center select-none cursor-pointer bg-slate-100">
+                <div key={i} className="flex w-[96%] h-[100px] mt-2 relative hover:bg-[#28292c] hover:shadow-lg hover:scale-105 duration-75 justify-center items-center select-none cursor-pointer bg-slate-100">
                   <div
-                    key={i}
+
                     onClick={() => {
+
                       dispatch(setFont1(d?.name));
                       dispatch(setFont2(d?.name));
                       dispatch(setFont3(d?.name));
@@ -111,19 +120,29 @@ function Styles({ search }) {
         ) : (
           <>
             {fonnt.map((d, i) => (
-              <div className="flex w-[96%] h-[100px] mt-2 relative hover:bg-[#28292c] hover:shadow-lg hover:scale-105 duration-75 justify-center items-center select-none cursor-pointer bg-slate-100">
+              <div key={i} className="flex w-[96%] h-[100px] mt-2 relative hover:bg-[#28292c] hover:shadow-lg hover:scale-105 duration-75 justify-center items-center select-none cursor-pointer bg-slate-100">
                 <div
-                  key={i}
+
                   onClick={() => {
-                    dispatch(setFont1(d?.name));
-                    dispatch(setFont2(d?.name));
-                    dispatch(setFont3(d?.name));
-                    dispatch(
-                      setFonts({
-                        Linke: d?.link,
-                        fontFamily: d?.name,
-                      })
-                    );
+                    sessionStorage.setItem("font", d?.name)
+                    if (active == "h1") {
+                      sessionStorage.setItem("font1", d?.name)
+                    }
+                    if (active == "h2") {
+                      sessionStorage.setItem("font2", d?.name)
+                    }
+                    if (active == "h3") {
+                      sessionStorage.setItem("font3", d?.name)
+                    }
+                    // dispatch(setFont1(d?.name));
+                    // dispatch(setFont2(d?.name));
+                    // dispatch(setFont3(d?.name));
+                    // dispatch(
+                    //   setFonts({
+                    //     Linke: d?.link,
+                    //     fontFamily: d?.name,
+                    //   })
+                    // );
                     if (d.premium) {
                       dispatch(setPremium({ type: "fonts" }));
                     } else {

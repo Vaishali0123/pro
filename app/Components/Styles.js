@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { setstyle } from "../redux/reducer/prosite_data";
+import { setPremium, setRemovePremium, setstyle } from "../redux/reducer/prosite_data";
 import axios from "axios";
+import { FaCrown } from "react-icons/fa6";
 
 function Styles() {
   const dispatch = useDispatch();
@@ -96,6 +97,11 @@ function Styles() {
                     buttoncss: d?.buttoncolor,
                   })
                 );
+                if (d.premium) {
+                  dispatch(setPremium({ type: "styles" }));
+                } else {
+                  dispatch(setRemovePremium({ type: "styles" }));
+                }
               }}
               className="px-4 py-2 flex-row flex shadow-lg h-full w-full rounded-sm bg-slate-200 text-black self-start"
             >
@@ -121,6 +127,11 @@ function Styles() {
                   height: "100%",
                 }}
               ></div>
+              <div>
+                {d.premium && <div>
+                  <FaCrown className=" text-orange-300 " />
+                </div>}
+              </div>
             </div>
           </div>
         </div>

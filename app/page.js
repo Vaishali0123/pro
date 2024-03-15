@@ -8,6 +8,11 @@ import back from "@/app/Visual.png";
 // import Elements from "@/app/Elements.png";
 // import textt from "@/app/text.png";
 import { CiMobile2 } from "react-icons/ci";
+import t1 from "./assets/t1.png"
+import t2 from "./assets/t2.png"
+import t3 from "./assets/t3.png"
+import t4 from "./assets/t4.png"
+import t5 from "./assets/t5.png"
 import Loader from "@/app/Loader.png";
 import Image from "next/image";
 import axios from "axios";
@@ -20,12 +25,14 @@ import { MdAnimation, MdOutlineCloudUpload, MdSearch } from "react-icons/md";
 import { IoIosArrowForward } from "react-icons/io";
 import { LiaToggleOffSolid, LiaToggleOnSolid } from "react-icons/lia";
 import Fontss from "./Components/Font";
+import { useScreenshot } from "use-screenshot-hook"
+import Membership from "./Components/Membership";
 // import {
 //   Drawer,
 //   DrawerClose,
 //   DrawerContent,
 //   DrawerDescription,
-//   DrawerFooter,
+//   DrawerFooter,  
 //   DrawerHeader,
 //   DrawerTitle,
 //   DrawerTrigger,
@@ -49,8 +56,13 @@ import Background from "./Components/Background";
 import html2canvas from "html2canvas";
 import { API, APIPRO } from "@/Essentials";
 
+
 function page() {
   const dispatch = useDispatch();
+  let font1
+  let font2
+  let font3
+  let font
   const [data, setData] = useState();
   const [pic1, setPic1] = useState("");
   const [text, setText] = useState("");
@@ -59,25 +71,41 @@ function page() {
   const [active, setActive] = useState("");
   const webRef = useRef();
   const [search, setSearch] = useState("");
+  const [pop, setPop] = useState(false)
   const [temp, setTemp] = useState();
-  // const h1 = useRef(null);
-  // const h2 = useRef(null);
-  // const h3 = useRef(null);
-
+  const { image, takeScreenshot } = useScreenshot({ ref: webRef })
   const [limg, setLimg] = useState([]);
 
+  const [a, setA] = useState(null)
+
   useEffect(() => {
+    const f = async () => {
+      try {
+        console.log(await takeScreenshot());
+      } catch (error) {
+        console.error('Error occurred while taking screenshot:', error);
+      }
+    };
+    f();
+  }, [takeScreenshot]);
+
+
+
+  useEffect(() => {
+    const temp = sessionStorage.getItem("temp") || 1
+    const setT = Number(temp)
+    setTemplate(setT)
     const i = localStorage.getItem("image");
     const a = JSON.parse(i);
     setLimg(a);
   }, []);
 
-  // useEffect(() => {
-  //   const data = sessionStorage.getItem("data");
-  //   const parseData = JSON.parse(data);
-  //   setData(parseData);
-  //   setId(parseData._id);
-  // }, []);
+  useEffect(() => {
+    const data = sessionStorage.getItem("data");
+    const parseData = JSON.parse(data);
+    setData(parseData);
+    setId(parseData._id);
+  }, []);
 
   // useEffect(() => {
   //   axios.get(`${API}/v1/templates/64b84197281876c462d40978`).then((res) => {
@@ -89,9 +117,9 @@ function page() {
     background_color,
     primeimage,
     textcolor,
-    font1,
-    font2,
-    font3,
+    // font1,
+    // font2,
+    // font3,
     color1,
     color2,
     buttoncss,
@@ -103,6 +131,31 @@ function page() {
     Name,
     Clic,
   } = useSelector((state) => state.prosite_data);
+  const [pfont, setPfont] = useState({
+    Font1: "",
+    Font2: "",
+    Font3: "",
+    Name: ""
+  })
+
+  useEffect(() => {
+    const font11 = sessionStorage.getItem("font1")
+    const font22 = sessionStorage.getItem("font2")
+    const font33 = sessionStorage.getItem("font3")
+    const font = sessionStorage.getItem("font")
+    setPfont({
+      Font1: font11,
+      Font2: font22,
+      Font3: font33,
+      Name: font
+    })
+  }, [active, dispatch, setPfont])
+
+  console.log(pfont.Font1)
+  console.log(pfont.Font3)
+  console.log(pfont.Name)
+  console.log(pfont.Font2)
+
   const [changetemp, setChangetemp] = useState(0);
   const [change, setChange] = useState(0);
   const [bgimg, setBgimg] = useState("");
@@ -472,11 +525,10 @@ function page() {
                         width: "100%",
                         textAlign: "center",
                       }}
-                      className={`text-[200%] pn:max-ss:text-[50%] ss:max-pp:text-[100%] pp:max-sm:text-[160%]  font-semibold text-black w-[100%] ${
-                        active === "h1"
-                          ? "border-2 border-blue-700 rounded-lg"
-                          : ""
-                      }`}
+                      className={`text-[200%] pn:max-ss:text-[50%] ss:max-pp:text-[100%] pp:max-sm:text-[160%]  font-semibold text-black w-[100%] ${active === "h1"
+                        ? "border-2 border-blue-700 rounded-lg"
+                        : ""
+                        }`}
                     >
                       {header1}
                     </div>
@@ -500,11 +552,10 @@ function page() {
                         width: "100%",
                         textAlign: "center",
                       }}
-                      className={`text-[100%] pn:max-ss:text-[30%] ss:max-pp:text-[60%] pp:max-sm:text-[80%] font-semibold text-black w-[100%] my-2 ${
-                        active === "h2"
-                          ? "border-2 border-blue-700 rounded-lg"
-                          : ""
-                      }`}
+                      className={`text-[100%] pn:max-ss:text-[30%] ss:max-pp:text-[60%] pp:max-sm:text-[80%] font-semibold text-black w-[100%] my-2 ${active === "h2"
+                        ? "border-2 border-blue-700 rounded-lg"
+                        : ""
+                        }`}
                     >
                       {header2}
                     </div>
@@ -526,11 +577,10 @@ function page() {
                         style={{
                           ...buttoncss,
                         }}
-                        className={`text-[100%] pn:max-ss:text-[30%] cursor-pointer ss:max-pp:text-[60%] pp:max-sm:text-[80%] ${
-                          change === 2
-                            ? "border-2 border-blue-700 rounded-lg"
-                            : ""
-                        }`}
+                        className={`text-[100%] pn:max-ss:text-[30%] cursor-pointer ss:max-pp:text-[60%] pp:max-sm:text-[80%] ${change === 2
+                          ? "border-2 border-blue-700 rounded-lg"
+                          : ""
+                          }`}
                       >
                         <div style={{ fontFamily: font3 ? font3 : Name }}>
                           {Button1}
@@ -1371,15 +1421,19 @@ function page() {
             </div>
           );
         }
-        console.log(template, "temp");
-        console.log(tempWed, "tempw");
-        console.log(tempPhone, "tempp");
-        // const web = webRef.current;
-        // const canvas = await html2canvas(web);
-        // const webt = canvas.toDataURL();
+        // const web = webRef.current
+        // const a = await takeScreenshot()
+        // console.log(a)
+        // setA(a)
+        html2canvas(webRef.current).then(function (canvas) {
+          const ctx = canvas.getContext('2d');
+          setA(canvas.toDataURL())
+
+        });
+
         localStorage.setItem("image", JSON.stringify([primeimage]));
         localStorage.setItem("bgimage", JSON.stringify([bgimage]));
-        console.log(primeimage, bgimage, "huihihih");
+
         const tempWeb = ReactDOMServer.renderToString(tempWed);
         const tempmob = ReactDOMServer.renderToString(tempPhone);
         const res = await axios.post(
@@ -1425,9 +1479,20 @@ function page() {
     ]
   );
 
+
   return (
     <div className="h-screen w-screen flex flex-col bg-[#424242]">
       {/* Header */}
+
+      {pop &&
+        <div className='fixed inset-0 z-50 w-screen flex justify-center items-center bg-black/50 sm:h-screen'>
+          <Membership setPop={setPop} />
+        </div>
+      }
+
+      {/* {image && <Image src={image} width={100} height={100} />} */}
+
+      {a && <Image src={a} width={100} height={100} />}
       <div className="h-[50px] w-[100%] border-b-2  bg-white flex flex-row justify-between pn:max-sm:fixed pn:max-sm:top-0 items-center">
         <div
           onClick={() => {
@@ -1447,19 +1512,16 @@ function page() {
             onClick={() => {
               setSwitcher(true);
             }}
-            className={` py-1 w-[100px] flex justify-center items-center rounded-lg gap-2 select-none cursor-pointer duration-100 ${
-              switcher === true ? "bg-[#EEF2FF]" : "bg-[#f7f7f7]"
-            }`}
+            className={` py-1 w-[100px] flex justify-center items-center rounded-lg gap-2 select-none cursor-pointer duration-100 ${switcher === true ? "bg-[#EEF2FF]" : "bg-[#f7f7f7]"
+              }`}
           >
             <HiOutlineDesktopComputer
-              className={`${
-                switcher === true ? "text-[#6366F1]" : "text-[#424242]"
-              }`}
+              className={`${switcher === true ? "text-[#6366F1]" : "text-[#424242]"
+                }`}
             />
             <div
-              className={`${
-                switcher === true ? "text-[#6366F1]" : "text-[#424242]"
-              }`}
+              className={`${switcher === true ? "text-[#6366F1]" : "text-[#424242]"
+                }`}
             >
               Web
             </div>
@@ -1468,19 +1530,16 @@ function page() {
             onClick={() => {
               setSwitcher(false);
             }}
-            className={` py-1 w-[100px] flex justify-center items-center rounded-lg gap-2 select-none cursor-pointer duration-100 ${
-              switcher === false ? "bg-[#EEF2FF]" : "bg-[#f7f7f7]"
-            }`}
+            className={` py-1 w-[100px] flex justify-center items-center rounded-lg gap-2 select-none cursor-pointer duration-100 ${switcher === false ? "bg-[#EEF2FF]" : "bg-[#f7f7f7]"
+              }`}
           >
             <CiMobile2
-              className={`${
-                switcher === false ? "text-[#6366F1]" : "text-[#424242]"
-              }`}
+              className={`${switcher === false ? "text-[#6366F1]" : "text-[#424242]"
+                }`}
             />
             <div
-              className={`${
-                switcher === false ? "text-[#6366F1]" : "text-[#424242]"
-              }`}
+              className={`${switcher === false ? "text-[#6366F1]" : "text-[#424242]"
+                }`}
             >
               Mobile
             </div>
@@ -1489,7 +1548,8 @@ function page() {
         <div
           onClick={() => {
             if (premium.ispremium) {
-              console.log("Membership Kharid");
+              setPop(true)
+              // console.log("Membership Kharid");
             } else {
               const a = primeimage?.toString();
               savetemplate(a);
@@ -1498,9 +1558,8 @@ function page() {
           // onClick={() => {
           //   setComponents(false);
           // }}
-          className={` select-none text-white px-4 py-1 hover:bg-[#6366F1] flex rounded-xl gap-1 mr-2 cursor-pointer font-semibold items-center ${
-            savetemplate ? " bg-[#6366F1] " : "bg-[#7476ec]"
-          }`}
+          className={` select-none text-white px-4 py-1 hover:bg-[#6366F1] flex rounded-xl gap-1 mr-2 cursor-pointer font-semibold items-center ${savetemplate ? " bg-[#6366F1] " : "bg-[#7476ec]"
+            }`}
         >
           <IoFlashOutline className="font-semibold" />
           <div>Set Live</div>
@@ -1516,11 +1575,10 @@ function page() {
                 setComponent(1);
                 setComponents(false);
               }}
-              className={`${
-                component === 1
-                  ? "flex flex-col bg-[#f6f6f6] rounded-xl w-[60px] sm:w-[60px] h-[54px] sm:h-[60px] justify-center items-center "
-                  : "flex flex-col sm:rounded-xl w-[60px] sm:w-[60px] h-[54px] sm:h-[60px] justify-center items-center "
-              }`}
+              className={`${component === 1
+                ? "flex flex-col bg-[#f6f6f6] rounded-xl w-[60px] sm:w-[60px] h-[54px] sm:h-[60px] justify-center items-center "
+                : "flex flex-col sm:rounded-xl w-[60px] sm:w-[60px] h-[54px] sm:h-[60px] justify-center items-center "
+                }`}
             >
               {/* <Image
                 src={Templates}
@@ -1535,11 +1593,10 @@ function page() {
                 setComponent(2);
                 setComponents(false);
               }}
-              className={`${
-                component === 2
-                  ? "flex flex-col bg-[#f6f6f6] rounded-xl w-[60px] sm:w-[60px] h-[54px] sm:h-[60px] justify-center items-center "
-                  : "flex flex-col sm:rounded-xl w-[60px] sm:w-[60px] h-[54px] sm:h-[60px] justify-center items-center "
-              }`}
+              className={`${component === 2
+                ? "flex flex-col bg-[#f6f6f6] rounded-xl w-[60px] sm:w-[60px] h-[54px] sm:h-[60px] justify-center items-center "
+                : "flex flex-col sm:rounded-xl w-[60px] sm:w-[60px] h-[54px] sm:h-[60px] justify-center items-center "
+                }`}
             >
               {/* <Image
                 src={textt}
@@ -1554,11 +1611,10 @@ function page() {
                 setComponent(3);
                 setComponents(false);
               }}
-              className={`${
-                component === 3
-                  ? "flex flex-col bg-[#f6f6f6] rounded-xl w-[60px] sm:w-[60px] h-[54px] sm:h-[60px] justify-center items-center "
-                  : "flex flex-col sm:rounded-xl w-[60px] sm:w-[60px] h-[54px] sm:h-[60px] justify-center items-center "
-              }`}
+              className={`${component === 3
+                ? "flex flex-col bg-[#f6f6f6] rounded-xl w-[60px] sm:w-[60px] h-[54px] sm:h-[60px] justify-center items-center "
+                : "flex flex-col sm:rounded-xl w-[60px] sm:w-[60px] h-[54px] sm:h-[60px] justify-center items-center "
+                }`}
             >
               {/* <Image
                 src={Elements}
@@ -1573,11 +1629,10 @@ function page() {
                 setComponent(4);
                 setComponents(false);
               }}
-              className={`${
-                component === 4
-                  ? "flex flex-col bg-[#f6f6f6] rounded-xl w-[60px] sm:w-[60px] h-[54px] sm:h-[60px] justify-center items-center "
-                  : "flex flex-col sm:rounded-xl w-[60px] sm:w-[60px] h-[54px] sm:h-[60px] justify-center items-center "
-              }`}
+              className={`${component === 4
+                ? "flex flex-col bg-[#f6f6f6] rounded-xl w-[60px] sm:w-[60px] h-[54px] sm:h-[60px] justify-center items-center "
+                : "flex flex-col sm:rounded-xl w-[60px] sm:w-[60px] h-[54px] sm:h-[60px] justify-center items-center "
+                }`}
             >
               {/* <Image
                 src={Loader}
@@ -1592,11 +1647,10 @@ function page() {
                 setComponent(5);
                 setComponents(false);
               }}
-              className={`${
-                component === 5
-                  ? "flex flex-col bg-[#f6f6f6] rounded-xl w-[60px] sm:w-[60px] h-[54px] sm:h-[60px] justify-center items-center "
-                  : "flex flex-col sm:rounded-xl w-[60px] sm:w-[60px] h-[54px] sm:h-[60px] justify-center items-center "
-              }`}
+              className={`${component === 5
+                ? "flex flex-col bg-[#f6f6f6] rounded-xl w-[60px] sm:w-[60px] h-[54px] sm:h-[60px] justify-center items-center "
+                : "flex flex-col sm:rounded-xl w-[60px] sm:w-[60px] h-[54px] sm:h-[60px] justify-center items-center "
+                }`}
             >
               {/* <Image
                 src={Settings}
@@ -1610,11 +1664,10 @@ function page() {
         </div>
         {/* side Components*/}
         <div
-          className={` ${
-            components
-              ? "h-[100%] w-[0px] pn:max-sm:w-[100%] pn:max-sm:h-[0%] pn:max-sm:fixed duration-300"
-              : "h-[100%] w-[500px] pn:max-sm:w-[100%] pn:max-sm:h-[70%] pn:max-sm:fixed duration-300"
-          }`}
+          className={` ${components
+            ? "h-[100%] w-[0px] pn:max-sm:w-[100%] pn:max-sm:h-[0%] pn:max-sm:fixed duration-300"
+            : "h-[100%] w-[500px] pn:max-sm:w-[100%] pn:max-sm:h-[70%] pn:max-sm:fixed duration-300"
+            }`}
         >
           <div className="h-[100%] w-[100%] sm:flex sm:flex-row-reverse pn:max-sm:w-[100%] pn:max-sm:h-[100%] pn:max-sm:bg-[#fff] justify-end pn:max-sm:rounded-t-xl">
             <div
@@ -1650,11 +1703,10 @@ function page() {
                     className="h-[100%] w-[50%] flex justify-center items-center"
                   >
                     <div
-                      className={`${
-                        changetemp === 0
-                          ? "text-[#868686] bg-[#dcdcdc] cursor-pointer font-medium rounded-xl w-[97%] flex h-[90%] justify-center items-center"
-                          : "text-[#868686] cursor-pointer font-medium"
-                      }`}
+                      className={`${changetemp === 0
+                        ? "text-[#868686] bg-[#dcdcdc] cursor-pointer font-medium rounded-xl w-[97%] flex h-[90%] justify-center items-center"
+                        : "text-[#868686] cursor-pointer font-medium"
+                        }`}
                     >
                       Templates
                     </div>
@@ -1666,11 +1718,10 @@ function page() {
                     className="h-[100%] w-[50%] flex justify-center items-center"
                   >
                     <div
-                      className={`${
-                        changetemp === 1
-                          ? "text-[#868686] bg-[#dcdcdc] cursor-pointer font-medium  rounded-xl w-[97%] flex h-[90%] justify-center items-center"
-                          : " text-[#868686] cursor-pointer font-medium "
-                      }`}
+                      className={`${changetemp === 1
+                        ? "text-[#868686] bg-[#dcdcdc] cursor-pointer font-medium  rounded-xl w-[97%] flex h-[90%] justify-center items-center"
+                        : " text-[#868686] cursor-pointer font-medium "
+                        }`}
                     >
                       Styles
                     </div>
@@ -1683,37 +1734,42 @@ function page() {
                   {/* Templates */}
                   {changetemp === 0 ? (
                     <div className="grid grid-cols-2 gap-2">
-                      {temp && <img src={temp} alt="image" />}
-                      <div
+                      {/* {temp && <img src={temp} alt="image" />} */}
+                      <Image
+                        src={t1}
                         onClick={() => {
                           setTemplate(1);
                         }}
                         className="w-[100%] hover:bg-[#28292c] hover:shadow-lg hover:scale-105 duration-75 h-[100px] bg-red-100 my-2"
                       />
-                      <div
+                      <Image
+                        src={t2}
                         onClick={() => {
                           setTemplate(2);
                         }}
                         className="w-[100%] h-[100px] hover:bg-[#28292c] hover:shadow-lg hover:scale-105 duration-75  bg-red-500 my-2"
-                      ></div>
-                      <div
+                      />
+                      <Image
+                        src={t3}
                         onClick={() => {
                           setTemplate(3);
                         }}
                         className="w-[100%] h-[100px] hover:bg-[#28292c] hover:shadow-lg hover:scale-105 duration-75  bg-red-500 my-2"
-                      ></div>
-                      <div
+                      />
+                      <Image
+                        src={t4}
                         onClick={() => {
                           setTemplate(4);
                         }}
                         className="w-[100%] h-[100px] hover:bg-[#28292c] hover:shadow-lg hover:scale-105 duration-75  bg-red-500 my-2"
-                      ></div>
-                      <div
+                      />
+                      <Image
+                        src={t5}
                         onClick={() => {
                           setTemplate(5);
                         }}
                         className="w-[100%] h-[100px] hover:bg-[#28292c] hover:shadow-lg hover:scale-105 duration-75  bg-red-500 my-2"
-                      ></div>
+                      />
                     </div>
                   ) : null}
                   {/* Styles */}
@@ -1728,27 +1784,25 @@ function page() {
             {component === 2 ? (
               <div className="h-[100%] w-[100%] pn:max-sm:w-[100%] overflow-auto bg-[#fff] items-center flex flex-col pn:max-sm:rounded-t-3xl ">
                 <div
-                  className={`${
-                    text1 === false
-                      ? "hidden"
-                      : "w-[90%] flex flex-col items-center mt-2"
-                  }`}
+                  className={`${text1 === false
+                    ? "hidden"
+                    : "w-[90%] flex flex-col items-center mt-2"
+                    }`}
                 >
                   <div className=" w-[100%] text-[#424242] ">Enter text</div>
                   <textarea
                     value={text}
                     placeholder="enter text what you need"
-                    className=" bg-[#f7f7f7] font-semibold resize-none border rounded-xl text-[#424242] w-[100%] mt-2 p-1 outline-none "
+                    className=" bg-[#f7f7f7] font-semibold no-scrollbar resize-none border rounded-xl text-[#424242] w-[100%] mt-2 p-1 outline-none "
                     ref={textareaRef}
                     onChange={handleTextareaChange}
                   />
                 </div>
                 <div
-                  className={` ${
-                    text1 === false
-                      ? "h-[100%] w-[90%] justify-evenly mt-2"
-                      : "h-[80%] w-[90%] justify-evenly mt-2"
-                  }`}
+                  className={` ${text1 === false
+                    ? "h-[100%] w-[90%] justify-evenly mt-2"
+                    : "h-[80%] w-[90%] justify-evenly mt-2"
+                    }`}
                 >
                   {" "}
                   <div className="bg-[#f7f7f7]  border rounded-xl my-2 h-[40px] flex justify-evenly overflow-hidden w-full">
@@ -1777,11 +1831,10 @@ function page() {
                     className="h-[100%] w-[50%] flex cursor-pointer justify-center items-center"
                   >
                     <div
-                      className={`${
-                        change === 0
-                          ? "text-[#424242] text-[12px] bg-[#dcdcdc] rounded-xl w-[97%] flex h-[90%] justify-center items-center"
-                          : " text-[#424242] text-[12px] "
-                      }`}
+                      className={`${change === 0
+                        ? "text-[#424242] text-[12px] bg-[#dcdcdc] rounded-xl w-[97%] flex h-[90%] justify-center items-center"
+                        : " text-[#424242] text-[12px] "
+                        }`}
                     >
                       Image
                     </div>
@@ -1793,11 +1846,10 @@ function page() {
                     className="h-[100%] w-[50%] flex cursor-pointer justify-center items-center"
                   >
                     <div
-                      className={`${
-                        change === 1
-                          ? "text-[#424242] text-[12px] bg-[#dcdcdc] rounded-xl w-[97%] flex h-[90%] justify-center items-center"
-                          : " text-[#424242] text-[12px] "
-                      }`}
+                      className={`${change === 1
+                        ? "text-[#424242] text-[12px] bg-[#dcdcdc] rounded-xl w-[97%] flex h-[90%] justify-center items-center"
+                        : " text-[#424242] text-[12px] "
+                        }`}
                     >
                       Background
                     </div>
@@ -1809,11 +1861,10 @@ function page() {
                     className="h-[100%] w-[50%] flex cursor-pointer justify-center items-center"
                   >
                     <div
-                      className={`${
-                        change === 2
-                          ? "text-[#424242] text-[12px] bg-[#dcdcdc] rounded-xl w-[97%] flex h-[90%] justify-center items-center"
-                          : " text-[#424242] text-[12px] "
-                      }`}
+                      className={`${change === 2
+                        ? "text-[#424242] text-[12px] bg-[#dcdcdc] rounded-xl w-[97%] flex h-[90%] justify-center items-center"
+                        : " text-[#424242] text-[12px] "
+                        }`}
                     >
                       Button
                     </div>
@@ -2163,19 +2214,16 @@ function page() {
               onClick={() => {
                 setSwitcher(true);
               }}
-              className={` py-1 w-[100px] flex justify-center items-center rounded-lg gap-2 select-none cursor-pointer duration-100 ${
-                switcher === true ? "bg-[#EEF2FF]" : "bg-[#ffffff]"
-              }`}
+              className={` py-1 w-[100px] flex justify-center items-center rounded-lg gap-2 select-none cursor-pointer duration-100 ${switcher === true ? "bg-[#EEF2FF]" : "bg-[#ffffff]"
+                }`}
             >
               <HiOutlineDesktopComputer
-                className={`${
-                  switcher === true ? "text-[#6366F1]" : "text-[#424242]"
-                }`}
+                className={`${switcher === true ? "text-[#6366F1]" : "text-[#424242]"
+                  }`}
               />
               <div
-                className={`${
-                  switcher === true ? "text-[#6366F1]" : "text-[#424242]"
-                }`}
+                className={`${switcher === true ? "text-[#6366F1]" : "text-[#424242]"
+                  }`}
               >
                 Web
               </div>
@@ -2184,34 +2232,31 @@ function page() {
               onClick={() => {
                 setSwitcher(false);
               }}
-              className={` py-1 w-[100px] flex justify-center items-center rounded-lg gap-2 select-none cursor-pointer duration-100 ${
-                switcher === false ? "bg-[#EEF2FF]" : "bg-[#ffffff]"
-              }`}
+              className={` py-1 w-[100px] flex justify-center items-center rounded-lg gap-2 select-none cursor-pointer duration-100 ${switcher === false ? "bg-[#EEF2FF]" : "bg-[#ffffff]"
+                }`}
             >
               <CiMobile2
-                className={`${
-                  switcher === false ? "text-[#6366F1]" : "text-[#424242]"
-                }`}
+                className={`${switcher === false ? "text-[#6366F1]" : "text-[#424242]"
+                  }`}
               />
               <div
-                className={`${
-                  switcher === false ? "text-[#6366F1]" : "text-[#424242]"
-                }`}
+                className={`${switcher === false ? "text-[#6366F1]" : "text-[#424242]"
+                  }`}
               >
                 Mobile
               </div>
             </div>
           </div>
           <div
-            className={`duration-75 ${
-              switcher === true
-                ? "h-[80%] w-[80%] bg-red-500 pn:max-ss:h-[30%] ss:max-pp:h-[40%] pp:max-sm:h-[60%] pn:max-sm:w-[98%] duration-75"
-                : "h-[500px] w-[300px] bg-slate-100"
-            }`}
+            ref={webRef}
+            className={`duration-75 ${switcher === true
+              ? "h-[80%] w-[80%] bg-red-500 pn:max-ss:h-[30%] ss:max-pp:h-[40%] pp:max-sm:h-[60%] pn:max-sm:w-[98%] duration-75"
+              : "h-[500px] w-[300px] bg-slate-100"
+              }`}
           >
             {/* Template 1 */}
             {template === 1 ? (
-              <div ref={webRef} className="w-[100%] h-[100%]">
+              <div className="w-[100%] h-[100%]">
                 {switcher === true ? (
                   <div
                     onClick={() => {
@@ -2223,17 +2268,17 @@ function page() {
                       backgroundImage: background_color
                         ? null
                         : bgimage
-                        ? `url(${bgimage})`
-                        : null,
+                          ? `url(${bgimage})`
+                          : null,
                       backgroundPosition: "center",
                       backgroundSize: "cover",
                       backgroundRepeat: "no-repeat",
                     }}
-                    className={`w-[100%] h-[100%] flex flex-row ${
-                      change === 1 ? "border-2 border-blue-700 " : ""
-                    }`}
+                    className={`w-[100%] h-[100%] flex flex-row ${change === 1 ? "border-2 border-blue-700 " : ""
+                      }`}
                   >
-                    <div className="h-[100%] w-[50%] flex flex-col justify-center items-center">
+                    {/* {bgimage && <Image src={bgimage} width={400} height={400} className="absolute z-0 inset-0 w-full h-full" />} */}
+                    <div className="h-[100%]  w-[50%] flex flex-col justify-center items-center">
                       <div className="h-[100%] w-[90%] flex flex-col justify-center items-center">
                         <link rel="stylesheet" href={Linkes} />
                         <div
@@ -2250,14 +2295,13 @@ function page() {
                             setText1(true);
                           }}
                           style={{
-                            fontFamily: font1 ? font1 : Name,
+                            fontFamily: pfont.Font1 ? pfont.Font1 : pfont.Name,
                             color: color1 ? color1 : textcolor,
                           }}
-                          className={`text-[200%] pn:max-ss:text-[50%] ss:max-pp:text-[100%] pp:max-sm:text-[160%]  font-semibold text-black w-[100%] ${
-                            active === "h1"
-                              ? "border-2 border-blue-700 rounded-lg"
-                              : ""
-                          }`}
+                          className={`text-[200%] pn:max-ss:text-[50%] ss:max-pp:text-[100%] pp:max-sm:text-[160%]  font-semibold text-black w-[100%] ${active === "h1"
+                            ? "border-2 border-blue-700 rounded-lg"
+                            : ""
+                            }`}
                         >
                           {header1}
                         </div>
@@ -2275,14 +2319,13 @@ function page() {
                             setText1(true);
                           }}
                           style={{
-                            fontFamily: font2 ? font2 : Name,
+                            fontFamily: pfont.Font2 ? pfont.Font2 : pfont.Name,
                             color: color2 ? color2 : textcolor,
                           }}
-                          className={`text-[100%] pn:max-ss:text-[30%] ss:max-pp:text-[60%] pp:max-sm:text-[80%] font-semibold text-black w-[100%] my-2 ${
-                            active === "h2"
-                              ? "border-2 border-blue-700 rounded-lg"
-                              : ""
-                          }`}
+                          className={`text-[100%] pn:max-ss:text-[30%] ss:max-pp:text-[60%] pp:max-sm:text-[80%] font-semibold text-black w-[100%] my-2 ${active === "h2"
+                            ? "border-2 border-blue-700 rounded-lg"
+                            : ""
+                            }`}
                         >
                           {header2}
                         </div>
@@ -2295,6 +2338,7 @@ function page() {
                             onClick={(e) => {
                               e.stopPropagation();
                               setComponent(3);
+                              setActive("h3")
                               setChange(2);
                             }}
                             style={{
@@ -2303,14 +2347,14 @@ function page() {
                               // color: textcolor,
                               // fontFamily: Name,
                             }}
-                            className={`text-[100%] pn:max-ss:text-[30%] cursor-pointer ss:max-pp:text-[60%] pp:max-sm:text-[80%] ${
-                              change === 2
-                                ? "border-2 border-blue-700 rounded-lg"
-                                : ""
-                            }`}
+                            className={`text-[100%] pn:max-ss:text-[30%] cursor-pointer ss:max-pp:text-[60%] pp:max-sm:text-[80%] ${active === "h3"
+                              ? "border-2 border-blue-700 rounded-lg"
+                              : ""
+                              }`}
                           >
-                            <div style={{ fontFamily: font3 ? font3 : Name }}>
+                            <div style={{ fontFamily: pfont.Font3 ? pfont.Font3 : pfont.Name }}>
                               {Button1}
+
                             </div>
                           </div>
                         </div>
@@ -2318,18 +2362,21 @@ function page() {
                     </div>
 
                     <div
+                      id="h4"
                       onClick={(e) => {
                         e.stopPropagation();
                         setComponent(3);
+                        setActive("h4")
                         setChange(0);
                       }}
-                      className={`h-[100%] w-[50%] justify-center items-center flex flex-col ${
-                        change === 0
-                          ? "border-2 border-blue-700 rounded-lg"
-                          : ""
-                      }`}
+                      className={`h-[100%]  w-[50%] justify-center items-center flex flex-col ${active === "h4"
+                        ? "border-2 border-blue-700 rounded-lg"
+                        : ""
+                        }`}
                     >
-                      <img
+                      <Image
+                        width={200}
+                        height={200}
                         src={primeimage}
                         alt="pic"
                         className="object-cover h-[400px] w-[400px] rounded-xl"
@@ -2342,8 +2389,8 @@ function page() {
                       backgroundImage: background_color
                         ? null
                         : bgimage
-                        ? `url(${bgimage})`
-                        : null,
+                          ? `url(${bgimage})`
+                          : null,
                       backgroundPosition: "center",
                       backgroundSize: "cover",
                       backgroundRepeat: "no-repeat",
@@ -2402,7 +2449,7 @@ function page() {
                               // color: textcolor,
                               // fontFamily: font2,
                             }}
-                            // className="text-[100%] pn:max-ss:text-[30%] ss:max-pp:text-[60%] pp:max-sm:text-[80%]"
+                          // className="text-[100%] pn:max-ss:text-[30%] ss:max-pp:text-[60%] pp:max-sm:text-[80%]"
                           >
                             <div style={{ fontFamily: font3 ? font3 : Name }}>
                               {Button1}
@@ -2412,9 +2459,11 @@ function page() {
                       </div>
                     </div>
                     <div className="h-[50%] w-[100%] justify-center items-center flex flex-col">
-                      <img
+                      <Image
                         src={primeimage}
                         alt="pic"
+                        width={200}
+                        height={200}
                         className="object-cover
                          h-[300px] w-[300px] "
                       />
@@ -2488,11 +2537,10 @@ function page() {
                               width: "100%",
                               textAlign: "center",
                             }}
-                            className={`text-[200%] pn:max-ss:text-[50%] ss:max-pp:text-[100%] pp:max-sm:text-[160%]  font-semibold text-black w-[100%] ${
-                              active === "h1"
-                                ? "border-2 border-blue-700 rounded-lg"
-                                : ""
-                            }`}
+                            className={`text-[200%] pn:max-ss:text-[50%] ss:max-pp:text-[100%] pp:max-sm:text-[160%]  font-semibold text-black w-[100%] ${active === "h1"
+                              ? "border-2 border-blue-700 rounded-lg"
+                              : ""
+                              }`}
                           >
                             {header1}
                           </div>
@@ -2516,11 +2564,10 @@ function page() {
                               width: "100%",
                               textAlign: "center",
                             }}
-                            className={`text-[100%] pn:max-ss:text-[30%] ss:max-pp:text-[60%] pp:max-sm:text-[80%] font-semibold text-black w-[100%] my-2 ${
-                              active === "h2"
-                                ? "border-2 border-blue-700 rounded-lg"
-                                : ""
-                            }`}
+                            className={`text-[100%] pn:max-ss:text-[30%] ss:max-pp:text-[60%] pp:max-sm:text-[80%] font-semibold text-black w-[100%] my-2 ${active === "h2"
+                              ? "border-2 border-blue-700 rounded-lg"
+                              : ""
+                              }`}
                           >
                             {header2}
                           </div>
@@ -2542,11 +2589,10 @@ function page() {
                               style={{
                                 ...buttoncss,
                               }}
-                              className={`text-[100%] pn:max-ss:text-[30%] cursor-pointer ss:max-pp:text-[60%] pp:max-sm:text-[80%] ${
-                                change === 2
-                                  ? "border-2 border-blue-700 rounded-lg"
-                                  : ""
-                              }`}
+                              className={`text-[100%] pn:max-ss:text-[30%] cursor-pointer ss:max-pp:text-[60%] pp:max-sm:text-[80%] ${change === 2
+                                ? "border-2 border-blue-700 rounded-lg"
+                                : ""
+                                }`}
                             >
                               <div style={{ fontFamily: font3 ? font3 : Name }}>
                                 {Button1}
@@ -2794,7 +2840,7 @@ function page() {
                                 color: textcolor,
                                 fontFamily: font2,
                               }}
-                              // className="text-[100%] pn:max-ss:text-[30%] ss:max-pp:text-[60%] pp:max-sm:text-[80%]"
+                            // className="text-[100%] pn:max-ss:text-[30%] ss:max-pp:text-[60%] pp:max-sm:text-[80%]"
                             >
                               <div style={{ fontFamily: font3 }}>{Button1}</div>
                             </div>
@@ -2952,7 +2998,7 @@ function page() {
                                 color: textcolor,
                                 fontFamily: font2,
                               }}
-                              // className="text-[100%] pn:max-ss:text-[30%] ss:max-pp:text-[60%] pp:max-sm:text-[80%]"
+                            // className="text-[100%] pn:max-ss:text-[30%] ss:max-pp:text-[60%] pp:max-sm:text-[80%]"
                             >
                               <div style={{ fontFamily: font3 }}>{Button1}</div>
                             </div>
@@ -2969,6 +3015,7 @@ function page() {
               <>
                 {switcher === true ? (
                   <div
+
                     style={{ backgroundColor: background_color }}
                     className="w-[100%] h-[100%] bg-gray-400 flex flex-col justify-center items-center"
                   >
@@ -3136,7 +3183,7 @@ function page() {
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 }
 

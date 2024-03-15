@@ -14,6 +14,8 @@ import style from "../pages/CustomScrollbar.module.css";
 import { ColorPicker, useColor } from "react-color-palette";
 import "react-color-palette/css";
 import { FaCrown } from "react-icons/fa6";
+import colors from "../assets/color.png"
+import Image from "next/image";
 
 function Background({ bgimg }) {
   const dispatch = useDispatch();
@@ -40,19 +42,24 @@ function Background({ bgimg }) {
 
   return (
     <>
+      <div onClick={() => setClickk(false)} className={`fixed inset-0 ${clickk ? "z-10" : "-z-10"} w-screen h-screen`}></div >
       <div className="my-2">
         <div className="text-[#424242] font-medium text-[14px]">
           Background color
         </div>
-        <div
+        {/* <div
           className=" h-[40px] w-[40px] mt-2 bg-[#424242]  rounded-lg"
           onClick={() => {
             dispatch(settClic(true));
             setClickk(true);
           }}
-        ></div>
+        ></div> */}
+        <Image src={colors} className="h-[40px] w-[40px] rounded-xl" alt="color" onClick={() => {
+          dispatch(settClic(true));
+          setClickk(true);
+        }} />
       </div>
-      <div className={clickk === false ? "hidden" : "absolute w-[250px] "}>
+      <div className={clickk === false ? "hidden" : "absolute w-[250px] z-10"}>
         <ColorPicker color={color} onChange={setColor} width="100%" />
       </div>
 

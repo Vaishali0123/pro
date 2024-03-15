@@ -6,6 +6,7 @@ import React, { useEffect } from "react";
 const Component = () => {
   const searchparams = useSearchParams();
   const id = searchparams.get("id");
+  const temp = searchparams.get("temp")
   const router = useRouter();
 
   const fetchid = async () => {
@@ -17,6 +18,7 @@ const Component = () => {
       if (res.data.success) {
         const data = res.data.user;
         sessionStorage.setItem("data", JSON.stringify(data));
+        sessionStorage.setItem("temp", Number(temp))
         router.push("/");
       } else {
         console.log("error");

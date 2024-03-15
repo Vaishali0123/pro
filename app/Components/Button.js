@@ -1,9 +1,10 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { setbuttoncss } from "../redux/reducer/prosite_data";
+import { setPremium, setRemovePremium, setbuttoncss } from "../redux/reducer/prosite_data";
 import axios from "axios";
 import { APIPRO } from "@/Essentials";
+import { FaCrown } from "react-icons/fa6";
 
 function Button() {
   const dispatch = useDispatch();
@@ -71,6 +72,11 @@ function Button() {
                 boxShadow: b?.boxShadow,
                 fontBold: b?.fontBold,
               }));
+              if (b.premium) {
+                dispatch(setPremium({ type: "buttons" }));
+              } else {
+                dispatch(setRemovePremium({ type: "buttons" }));
+              }
               // setButton(1);
               // setBorder(2);
               // setBgbutton("#BC3433");
@@ -99,8 +105,11 @@ function Button() {
           // className="px-4 py-2 shadow-lg rounded-sm bg-white text-black self-start"
           >
             Click Now
-            {console.log(b?.backgroundColor)}
           </div>
+
+          {b.premium && <div>
+            <FaCrown className=" text-orange-300 " />
+          </div>}
         </div>
       ))}
     </div>
